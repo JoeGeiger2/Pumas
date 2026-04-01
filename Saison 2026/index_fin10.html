@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Dokumente – Öffentlicher Ordner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #f7f7f7; }
+    header { background: #0a7; color: white; padding: 1rem 1.25rem; }
+    main { padding: 1rem 1.25rem; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 1.25rem; margin: 0; }
+    p { margin: 0.5rem 0 1rem; color: #333; }
+    ul { list-style: none; padding: 0; margin: 0; }
+
+    /* Normale Datei-Einträge */
+    li { background: white; margin: 0.5rem 0; border-radius: 10px; }
+    a { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1rem; text-decoration: none; color: #111; }
+    a:hover { background: #eefaf5; border-radius: 10px; }
+    .icon { width: 28px; height: 28px; display: inline-grid; place-items: center; border-radius: 6px; background: #e8f7f1; color: #0a7; font-weight: 600; font-size: 0.7rem; }
+    .name { flex: 1; }
+    .meta { color: #666; font-size: 0.9rem; }
+
+    /* Ordner */
+    .folder { background: white; margin: 0.5rem 0; border-radius: 10px; overflow: hidden; }
+
+    .folder-header {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .folder-header:hover { background: #eefaf5; }
+
+    .folder-icon {
+      width: 28px; height: 28px;
+      display: inline-grid; place-items: center;
+      border-radius: 6px; background: #e8f7f1; color: #0a7; font-weight: 600; font-size: 0.7rem;
+    }
+    .folder-name { flex: 1; color: #111; }
+    .folder-meta { color: #666; font-size: 0.9rem; }
+    .chevron { color: #aaa; font-size: 1rem; transition: transform .25s; }
+    .folder.open .chevron { transform: rotate(90deg); }
+
+    .folder-files {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease;
+      border-top: 1px solid transparent;
+    }
+    .folder.open .folder-files {
+      max-height: 800px;
+      border-top-color: #f0f0f0;
+    }
+
+    .folder-files a {
+      padding-left: 1.75rem; /* einrücken */
+      border-bottom: 1px solid #f5f5f5;
+      border-radius: 0;
+    }
+    .folder-files a:last-child { border-bottom: none; }
+    .folder-files a:hover { border-radius: 0; }
+
+    footer { padding: 1.25rem; color: #666; text-align: center; font-size: 0.9rem; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #121212; }
+      p, .meta, a, .folder-name, .folder-meta { color: #eaeaea; }
+      li, .folder { background: #1a1a1a; }
+      a:hover, .folder-header:hover { background: #0f2c26; }
+      .folder-files { border-top-color: #2a2a2a !important; }
+      .folder-files a { border-bottom-color: #222; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dokumente</h1>
+    <p>Öffentlicher Ordner – Tippe zum Öffnen (Links öffnen in neuem Tab).</p>
+  </header>
+  <main>
+    <ul>
+
+      <!-- ── Ordner 1: Saison 2026 ── -->
+      <li class="folder" id="folder-saison">
+        <div class="folder-header" onclick="toggleFolder('folder-saison')">
+          <span class="folder-icon">DIR</span>
+          <span class="folder-name">Saison 2026</span>
+          <span class="folder-meta">2 Dokumente</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="folder-files">
+          <a href="Aushang - Jahres-Startzeiten 2026.pdf" target="_blank" rel="noopener">
+            <span class="icon">PDF</span>
+            <span class="name">Abschlagszeiten 2026</span>
+            <span class="meta">PDF</span>
+          </a>
+          <a href="Programm 2026.pdf" target="_blank" rel="noopener">
+            <span class="icon">PDF</span>
+            <span class="name">Terminplan Graue Pumas 2026</span>
+            <span class="meta">PDF</span>
+          </a>
+        </div>
+      </li>
+
+      <!-- ── Ordner 2: Pumareise 2026 ── -->
+      <li class="folder" id="folder-pumareise">
+        <div class="folder-header" onclick="toggleFolder('folder-pumareise')">
+          <span class="folder-icon">DIR</span>
+          <span class="folder-name">Pumareise 2026</span>
+          <span class="folder-meta">2 Dokumente</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="folder-files">
+          <a href="Anlage Pumareise 2026.pdf" target="_blank" rel="noopener">
+            <span class="icon">PDF</span>
+            <span class="name">Pumareise 2026 – Details</span>
+            <span class="meta">PDF</span>
+          </a>
+          <a href="Pumareise 2026 - Anmeldeformular.pdf" target="_blank" rel="noopener">
+            <span class="icon">PDF</span>
+            <span class="name">Pumareise 2026 – Anmeldung</span>
+            <span class="meta">PDF</span>
+          </a>
+        </div>
+      </li>
+
+    </ul>
+  </main>
+  <footer>
+    pCloud Public Folder – Index Seite<br>
+    <span style="color:#999; font-size:0.85rem;">
+      Hinweis: Alle Dokumente sind direkt verlinkt – nur „Ergebnisse" ist als Ordner verfügbar.
+    </span>
+  </footer>
+
+  <script>
+    function toggleFolder(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
