@@ -5,46 +5,25 @@ chcp 65001 >nul
 :: ============================================================
 :: generate.bat  –  Senior Golfer Webseite
 ::
-:: Aufruf:
-::   generate.bat <verzeichnis> "Datei1" "Datei2" ...
-::
-:: Beispiele:
-::   generate.bat saison2026 "Terminplan 2026.pdf" "Spielordnung.pdf"
-::   generate.bat startlisten "Startliste 01.06.2026.pdf"
-::   generate.bat ergebnisse "Ergebnis Senioren Cup.pdf" "Ergebnis Juni.pdf"
-::   generate.bat fotos "Turnier Mai.jpg" "Sommerfest 2026.jpg"
-::
-:: Erlaubte Verzeichnisse: saison2026, startlisten, ergebnisse, fotos
-:: Dateitypen:  PDF-Dateien  →  roter Badge
-::              JPG-Dateien  →  blauer Badge
+:: Diese .bat in den jeweiligen Unterordner kopieren und
+:: einfach per Doppelklick starten.
+:: Sie erkennt automatisch in welchem Ordner sie liegt,
+:: liest alle PDF/JPG-Dateien ein und erstellt die index.html.
 :: ============================================================
 
-:: ── Parameter prüfen ────────────────────────────────────────
-if "%~1"=="" (
-    echo.
-    echo  FEHLER: Kein Verzeichnis angegeben.
-    echo.
-    echo  Aufruf:  generate.bat ^<verzeichnis^> "Datei1" "Datei2" ...
-    echo  Beispiel: generate.bat saison2026 "Terminplan 2026.pdf"
-    echo.
-    pause
-    exit /b 1
-)
+:: ── Eigenen Ordner bestimmen ─────────────────────────────────
+set "MYDIR=%~dp0"
+if "%MYDIR:~-1%"=="\" set "MYDIR=%MYDIR:~0,-1%"
+for %%F in ("%MYDIR%") do set "DIR=%%~nxF"
+set "OUTFILE=%MYDIR%\index.html"
 
-set "DIR=%~1"
-set "OUTFILE=%DIR%\index.html"
+echo.
+echo  Senior Golfer - Index-Generator
+echo  ================================
+echo  Ordner erkannt: %DIR%
+echo.
 
-:: ── Verzeichnis prüfen ──────────────────────────────────────
-if not exist "%DIR%\" (
-    echo.
-    echo  FEHLER: Verzeichnis "%DIR%" nicht gefunden.
-    echo  Bitte erst anlegen oder Namen prüfen.
-    echo.
-    pause
-    exit /b 1
-)
-
-:: ── Icon, Titel und Untertitel je Verzeichnis ───────────────
+:: ── Icon, Titel und Untertitel je Verzeichnis ────────────────
 if /i "%DIR%"=="saison2026"  set "ICON=📅" & set "TITLE=Saison 2026"  & set "SUB=Dokumente ^&amp; Informationen zur Saison"
 if /i "%DIR%"=="startlisten" set "ICON=📋" & set "TITLE=Startlisten"  & set "SUB=Aktuelle Startlisten als PDF"
 if /i "%DIR%"=="ergebnisse"  set "ICON=🏆" & set "TITLE=Ergebnisse"   & set "SUB=Turnierergebnisse als PDF"
@@ -52,69 +31,41 @@ if /i "%DIR%"=="fotos"       set "ICON=📷" & set "TITLE=Fotos"        & set "S
 if /i "%DIR%"=="sonstiges"   set "ICON=📁" & set "TITLE=Sonstiges"    & set "SUB=Weitere Dokumente als PDF"
 
 if not defined TITLE (
-    echo.
-    echo  FEHLER: Unbekanntes Verzeichnis "%DIR%".
+    echo  FEHLER: Ordner "%DIR%" ist unbekannt.
     echo  Erlaubt: saison2026 ^| startlisten ^| ergebnisse ^| fotos ^| sonstiges
     echo.
     pause
     exit /b 1
 )
 
-:: ── Dateien ab Parameter 2 sammeln ──────────────────────────
-set "ITEMS="
+:: ── Alle PDF und JPG Dateien im Ordner einlesen ──────────────
 set "COUNT=0"
-shift
-:collect
-if "%~1"=="" goto build
-set /a COUNT+=1
-set "FNAME=%~1"
 
-:: Dateiendung ermitteln (letzten 4 Zeichen)
-set "EXT=%FNAME:~-4%"
-set "EXT_UP=%EXT%"
-for %%A in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do (
-    call set "EXT_UP=%%EXT_UP:%%A=%%A%%"
+:: Temporaere Hilfsdatei fuer Dateiliste
+set "TMPFILE=%MYDIR%\_filelist_tmp.txt"
+if exist "%TMPFILE%" del "%TMPFILE%"
+
+for %%F in ("%MYDIR%\*.pdf" "%MYDIR%\*.PDF") do (
+    echo %%~nxF|PDF|background:linear-gradient(135deg,#c0392b,#e74c3c^) >> "%TMPFILE%"
+    set /a COUNT+=1
 )
-:: Einfachere Endungs-Erkennung via Fallunterscheidung
-echo %FNAME% | findstr /i "\.pdf$" >nul && set "FTYPE=PDF" && set "BADGE_COLOR=background:linear-gradient(135deg,#c0392b,#e74c3c)"
-echo %FNAME% | findstr /i "\.jpg$" >nul && set "FTYPE=JPG" && set "BADGE_COLOR=background:linear-gradient(135deg,#1a6b8a,#2196b0)"
-echo %FNAME% | findstr /i "\.jpeg$" >nul && set "FTYPE=JPG" && set "BADGE_COLOR=background:linear-gradient(135deg,#1a6b8a,#2196b0)"
-
-set "ITEMS=!ITEMS!    <li class="file-item">^
-
-      <a href="%FNAME%" target="_blank">^
-
-        <div class="file-type-badge" style="!BADGE_COLOR!">!FTYPE!</div>^
-
-        <span class="file-name">%FNAME%</span>^
-
-        <span class="file-arrow">↗</span>^
-
-      </a>^
-
-    </li>^
-
-"
-shift
-goto collect
-
-:build
-if %COUNT%==0 (
-    echo.
-    echo  WARNUNG: Keine Dateien angegeben – leere Liste wird erzeugt.
-    echo.
+for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.JPG" "%MYDIR%\*.jpeg" "%MYDIR%\*.JPEG") do (
+    echo %%~nxF|JPG|background:linear-gradient(135deg,#1a6b8a,#2196b0^) >> "%TMPFILE%"
+    set /a COUNT+=1
 )
 
-:: ── HTML schreiben ──────────────────────────────────────────
-echo Schreibe %OUTFILE% ...
+echo  Gefundene Dateien: %COUNT%
+echo.
+echo  Schreibe index.html ...
 
+:: ── HTML Kopf schreiben ──────────────────────────────────────
 (
 echo ^<!DOCTYPE html^>
 echo ^<html lang="de"^>
 echo ^<head^>
 echo   ^<meta charset="UTF-8"^>
 echo   ^<meta name="viewport" content="width=device-width, initial-scale=1.0"^>
-echo   ^<title^>%TITLE% – Senior Golfer^</title^>
+echo   ^<title^>%TITLE% - Senior Golfer^</title^>
 echo   ^<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700^&family=Source+Sans+3:wght@300;400;600^&display=swap" rel="stylesheet"^>
 echo   ^<style^>
 echo     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -167,7 +118,7 @@ echo ^<body^>
 echo.
 echo ^<header^>
 echo   ^<div class="header-inner"^>
-echo     ^<a class="back-link" href="../index.html"^>← Zurück zur Übersicht^</a^>
+echo     ^<a class="back-link" href="../index.html"^>← Zuruck zur Ubersicht^</a^>
 echo     ^<div class="header-top"^>
 echo       ^<div class="header-icon"^>%ICON%^</div^>
 echo       ^<div^>
@@ -183,16 +134,24 @@ echo   ^<p class="section-label"^>Dateien^</p^>
 echo   ^<ul class="file-list"^>
 ) > "%OUTFILE%"
 
-:: ── Dateiliste einfügen ─────────────────────────────────────
+:: ── Dateieintraege schreiben ─────────────────────────────────
 if %COUNT%==0 (
     echo     ^<li style="padding:2rem 1rem;text-align:center;color:#5a5a5a;"^>Noch keine Dateien vorhanden.^</li^> >> "%OUTFILE%"
 ) else (
-    for /f "tokens=*" %%L in ('echo !ITEMS!') do (
-        echo %%L >> "%OUTFILE%"
+    for /f "usebackq tokens=1,2,3 delims=|" %%A in ("%TMPFILE%") do (
+        (
+        echo     ^<li class="file-item"^>
+        echo       ^<a href="%%A" target="_blank"^>
+        echo         ^<div class="file-type-badge" style="%%C"^>%%B^</div^>
+        echo         ^<span class="file-name"^>%%A^</span^>
+        echo         ^<span class="file-arrow"^>↗^</span^>
+        echo       ^</a^>
+        echo     ^</li^>
+        ) >> "%OUTFILE%"
     )
 )
 
-:: ── HTML abschließen ────────────────────────────────────────
+:: ── HTML abschliessen ────────────────────────────────────────
 (
 echo   ^</ul^>
 echo ^</main^>
@@ -205,7 +164,13 @@ echo ^</body^>
 echo ^</html^>
 ) >> "%OUTFILE%"
 
+:: Hilfsdatei loeschen
+if exist "%TMPFILE%" del "%TMPFILE%"
+
 echo.
-echo  ✓  %OUTFILE% wurde mit %COUNT% Datei(en^) erstellt.
+echo  ✓  index.html wurde mit %COUNT% Datei(en) erstellt.
 echo.
+echo  Nicht vergessen: In GitHub Desktop committen und pushen!
+echo.
+pause
 endlocal
