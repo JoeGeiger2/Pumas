@@ -173,7 +173,7 @@ echo   ^</ul^>
 echo ^</main^>
 echo.
 echo ^<footer^>
-echo   ^&copy; 2026 ^&middot; Senior Golfer
+echo   ^&copy; 2026 ^&middot; Golfclub Tegernbach ^&middot; Graue Pumas
 echo ^</footer^>
 echo.
 echo ^</body^>
