@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ergebnisse – Senior Golfer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Ergebnisse - Senior Golfer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700^&family=Source+Sans+3:wght@300;400;600^&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -44,7 +44,6 @@
     .file-item a:active { transform: translateX(0); }
     .file-type-badge {
       flex-shrink: 0; width: 38px; height: 38px; border-radius: 8px;
-      background: linear-gradient(135deg, #c0392b, #e74c3c);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.65rem; font-weight: 700; color: #fff; letter-spacing: 0.05em;
     }
@@ -57,9 +56,9 @@
 
 <header>
   <div class="header-inner">
-    <a class="back-link" href="../index.html">← Zurück zur Übersicht</a>
+    <a class="back-link" href="../index.html">&larr; Zuruck zur Ubersicht</a>
     <div class="header-top">
-      <div class="header-icon">🏆</div>
+      <div class="header-icon">
       <div>
         <h1>Ergebnisse</h1>
         <div class="header-sub">Turnierergebnisse als PDF</div>
@@ -69,37 +68,14 @@
 </header>
 
 <main>
-  <p class="section-label">PDF-Dokumente</p>
-
-  <!--
-    ═══════════════════════════════════════════════════════
-    ANLEITUNG: Dateien eintragen
-    Beispiel:
-      <li class="file-item">
-        <a href="ergebnis-senioren-cup-2026.pdf" target="_blank">
-          <div class="file-type-badge">PDF</div>
-          <span class="file-name">Senioren Cup 2026</span>
-          <span class="file-arrow">↗</span>
-        </a>
-      </li>
-    ═══════════════════════════════════════════════════════
-  -->
-
+  <p class="section-label">Dateien</p>
   <ul class="file-list">
-
-    <li class="file-item">
-      <a href="beispiel.pdf" target="_blank">
-        <div class="file-type-badge">PDF</div>
-        <span class="file-name">Beispiel-Ergebnis</span>
-        <span class="file-arrow">↗</span>
-      </a>
-    </li>
-
+    <li style="padding:2rem 1rem;text-align:center;color:#5a5a5a;">Noch keine Dateien vorhanden.</li> 
   </ul>
 </main>
 
 <footer>
-  &copy; 2026 · Senior Golfer
+  &copy; 2026 &middot; Golfclub Tegernbach &middot; Graue Pumas
 </footer>
 
 </body>
