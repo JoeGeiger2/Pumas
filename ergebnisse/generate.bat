@@ -2,46 +2,40 @@
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 
-:: ============================================================
-:: generate.bat  –  Senior Golfer Webseite
-::
-:: Diese .bat in den jeweiligen Unterordner kopieren und
-:: einfach per Doppelklick starten.
-:: Sie erkennt automatisch in welchem Ordner sie liegt,
-:: liest alle PDF/JPG-Dateien ein und erstellt die index.html.
-:: ============================================================
+:: generate.bat - Senior Golfer Webseite
+:: Diese .bat in den Unterordner kopieren und per Doppelklick starten.
+:: Sie erkennt automatisch den Ordner, liest alle PDF/JPG ein
+:: und erstellt die index.html.
 
-:: ── Eigenen Ordner bestimmen ─────────────────────────────────
+:: Eigenen Ordner bestimmen
 set "MYDIR=%~dp0"
 if "%MYDIR:~-1%"=="\" set "MYDIR=%MYDIR:~0,-1%"
 for %%F in ("%MYDIR%") do set "DIR=%%~nxF"
 set "OUTFILE=%MYDIR%\index.html"
 
 echo.
-echo  Senior Golfer - Index-Generator
-echo  ================================
-echo  Ordner erkannt: %DIR%
+echo Senior Golfer - Index-Generator
+echo ================================
+echo Ordner erkannt: %DIR%
 echo.
 
-:: ── Icon, Titel und Untertitel je Verzeichnis ────────────────
-if /i "%DIR%"=="saison2026"  set "ICON=📅" & set "TITLE=Saison 2026"  & set "SUB=Dokumente ^&amp; Informationen zur Saison"
-if /i "%DIR%"=="startlisten" set "ICON=📋" & set "TITLE=Startlisten"  & set "SUB=Aktuelle Startlisten als PDF"
-if /i "%DIR%"=="ergebnisse"  set "ICON=🏆" & set "TITLE=Ergebnisse"   & set "SUB=Turnierergebnisse als PDF"
-if /i "%DIR%"=="fotos"       set "ICON=📷" & set "TITLE=Fotos"        & set "SUB=Bilder aus dem Clubgeschehen"
-if /i "%DIR%"=="sonstiges"   set "ICON=📁" & set "TITLE=Sonstiges"    & set "SUB=Weitere Dokumente als PDF"
+:: Icon, Titel und Untertitel je Verzeichnis
+if /i "%DIR%"=="saison2026"  set "ICON=&#128197;" & set "TITLE=Saison 2026"  & set "SUB=Dokumente &amp; Informationen zur Saison"
+if /i "%DIR%"=="startlisten" set "ICON=&#128203;" & set "TITLE=Startlisten"  & set "SUB=Aktuelle Startlisten als PDF"
+if /i "%DIR%"=="ergebnisse"  set "ICON=&#127942;" & set "TITLE=Ergebnisse"   & set "SUB=Turnierergebnisse als PDF"
+if /i "%DIR%"=="fotos"       set "ICON=&#128247;" & set "TITLE=Fotos"        & set "SUB=Bilder aus dem Clubgeschehen"
+if /i "%DIR%"=="sonstiges"   set "ICON=&#128193;" & set "TITLE=Sonstiges"    & set "SUB=Weitere Dokumente als PDF"
 
 if not defined TITLE (
-    echo  FEHLER: Ordner "%DIR%" ist unbekannt.
-    echo  Erlaubt: saison2026 ^| startlisten ^| ergebnisse ^| fotos ^| sonstiges
+    echo FEHLER: Ordner "%DIR%" ist unbekannt.
+    echo Erlaubt: saison2026, startlisten, ergebnisse, fotos, sonstiges
     echo.
     pause
     exit /b 1
 )
 
-:: ── Alle PDF und JPG Dateien im Ordner einlesen ──────────────
+:: Alle PDF und JPG Dateien einlesen
 set "COUNT=0"
-
-:: Temporaere Hilfsdatei fuer Dateiliste
 set "TMPFILE=%MYDIR%\_filelist_tmp.txt"
 if exist "%TMPFILE%" del "%TMPFILE%"
 
@@ -54,11 +48,11 @@ for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.JPG" "%MYDIR%\*.jpeg" "%MYDIR%\*.JPEG") d
     set /a COUNT+=1
 )
 
-echo  Gefundene Dateien: %COUNT%
+echo Gefundene Dateien: %COUNT%
 echo.
-echo  Schreibe index.html ...
+echo Schreibe index.html ...
 
-:: ── HTML Kopf schreiben ──────────────────────────────────────
+:: HTML Kopf schreiben
 (
 echo ^<!DOCTYPE html^>
 echo ^<html lang="de"^>
@@ -118,7 +112,7 @@ echo ^<body^>
 echo.
 echo ^<header^>
 echo   ^<div class="header-inner"^>
-echo     ^<a class="back-link" href="../index.html"^>← Zuruck zur Ubersicht^</a^>
+echo     ^<a class="back-link" href="../index.html"^>^&larr; Zuruck zur Ubersicht^</a^>
 echo     ^<div class="header-top"^>
 echo       ^<div class="header-icon"^>%ICON%^</div^>
 echo       ^<div^>
@@ -134,7 +128,7 @@ echo   ^<p class="section-label"^>Dateien^</p^>
 echo   ^<ul class="file-list"^>
 ) > "%OUTFILE%"
 
-:: ── Dateieintraege schreiben ─────────────────────────────────
+:: Dateieintraege schreiben
 if %COUNT%==0 (
     echo     ^<li style="padding:2rem 1rem;text-align:center;color:#5a5a5a;"^>Noch keine Dateien vorhanden.^</li^> >> "%OUTFILE%"
 ) else (
@@ -144,33 +138,32 @@ if %COUNT%==0 (
         echo       ^<a href="%%A" target="_blank"^>
         echo         ^<div class="file-type-badge" style="%%C"^>%%B^</div^>
         echo         ^<span class="file-name"^>%%A^</span^>
-        echo         ^<span class="file-arrow"^>↗^</span^>
+        echo         ^<span class="file-arrow"^>^&nearr;^</span^>
         echo       ^</a^>
         echo     ^</li^>
         ) >> "%OUTFILE%"
     )
 )
 
-:: ── HTML abschliessen ────────────────────────────────────────
+:: HTML abschliessen
 (
 echo   ^</ul^>
 echo ^</main^>
 echo.
 echo ^<footer^>
-echo   ^&copy; 2026 · Senior Golfer
+echo   ^&copy; 2026 ^&middot; Senior Golfer
 echo ^</footer^>
 echo.
 echo ^</body^>
 echo ^</html^>
 ) >> "%OUTFILE%"
 
-:: Hilfsdatei loeschen
 if exist "%TMPFILE%" del "%TMPFILE%"
 
 echo.
-echo  ✓  index.html wurde mit %COUNT% Datei(en) erstellt.
+echo Fertig! index.html wurde mit %COUNT% Datei(en^) erstellt.
 echo.
-echo  Nicht vergessen: In GitHub Desktop committen und pushen!
+echo Nicht vergessen: In GitHub Desktop committen und pushen!
 echo.
 pause
 endlocal
