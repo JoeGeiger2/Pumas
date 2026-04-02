@@ -4,8 +4,6 @@ chcp 65001 >nul
 
 :: generate.bat - Senior Golfer Webseite
 :: Diese .bat in den Unterordner kopieren und per Doppelklick starten.
-:: Sie erkennt automatisch den Ordner, liest alle PDF/JPG ein
-:: und erstellt die index.html.
 
 :: Eigenen Ordner bestimmen
 set "MYDIR=%~dp0"
@@ -20,11 +18,35 @@ echo Ordner erkannt: %DIR%
 echo.
 
 :: Icon, Titel und Untertitel je Verzeichnis
-if /i "%DIR%"=="saison2026"  set "ICON=&#128197;" & set "TITLE=Saison 2026"  & set "SUB=Dokumente &amp; Informationen zur Saison"
-if /i "%DIR%"=="startlisten" set "ICON=&#128203;" & set "TITLE=Startlisten"  & set "SUB=Aktuelle Startlisten als PDF"
-if /i "%DIR%"=="ergebnisse"  set "ICON=&#127942;" & set "TITLE=Ergebnisse"   & set "SUB=Turnierergebnisse als PDF"
-if /i "%DIR%"=="fotos"       set "ICON=&#128247;" & set "TITLE=Fotos"        & set "SUB=Bilder aus dem Clubgeschehen"
-if /i "%DIR%"=="sonstiges"   set "ICON=&#128193;" & set "TITLE=Sonstiges"    & set "SUB=Weitere Dokumente als PDF"
+set "ICON="
+set "TITLE="
+set "SUB="
+
+if /i "%DIR%"=="saison2026" (
+    set "ICON=&#128197;"
+    set "TITLE=Saison 2026"
+    set "SUB=Dokumente &amp; Informationen zur Saison"
+)
+if /i "%DIR%"=="startlisten" (
+    set "ICON=&#128203;"
+    set "TITLE=Startlisten"
+    set "SUB=Aktuelle Startlisten als PDF"
+)
+if /i "%DIR%"=="ergebnisse" (
+    set "ICON=&#127942;"
+    set "TITLE=Ergebnisse"
+    set "SUB=Turnierergebnisse als PDF"
+)
+if /i "%DIR%"=="fotos" (
+    set "ICON=&#128247;"
+    set "TITLE=Fotos"
+    set "SUB=Bilder aus dem Clubgeschehen"
+)
+if /i "%DIR%"=="sonstiges" (
+    set "ICON=&#128193;"
+    set "TITLE=Sonstiges"
+    set "SUB=Weitere Dokumente als PDF"
+)
 
 if not defined TITLE (
     echo FEHLER: Ordner "%DIR%" ist unbekannt.
@@ -33,24 +55,6 @@ if not defined TITLE (
     pause
     exit /b 1
 )
-
-:: Alle PDF und JPG Dateien einlesen
-set "COUNT=0"
-set "TMPFILE=%MYDIR%\_filelist_tmp.txt"
-if exist "%TMPFILE%" del "%TMPFILE%"
-
-for %%F in ("%MYDIR%\*.pdf" "%MYDIR%\*.PDF") do (
-    echo %%~nxF|PDF|background:linear-gradient(135deg,#c0392b,#e74c3c^) >> "%TMPFILE%"
-    set /a COUNT+=1
-)
-for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.JPG" "%MYDIR%\*.jpeg" "%MYDIR%\*.JPEG") do (
-    echo %%~nxF|JPG|background:linear-gradient(135deg,#1a6b8a,#2196b0^) >> "%TMPFILE%"
-    set /a COUNT+=1
-)
-
-echo Gefundene Dateien: %COUNT%
-echo.
-echo Schreibe index.html ...
 
 :: HTML Kopf schreiben
 (
@@ -128,21 +132,39 @@ echo   ^<p class="section-label"^>Dateien^</p^>
 echo   ^<ul class="file-list"^>
 ) > "%OUTFILE%"
 
-:: Dateieintraege schreiben
+:: PDF Dateien direkt in HTML schreiben
+set "COUNT=0"
+set "BADGE_PDF=background:linear-gradient(135deg,#c0392b,#e74c3c)"
+set "BADGE_JPG=background:linear-gradient(135deg,#1a6b8a,#2196b0)"
+
+for %%F in ("%MYDIR%\*.pdf" "%MYDIR%\*.PDF") do (
+    set /a COUNT+=1
+    (
+    echo     ^<li class="file-item"^>
+    echo       ^<a href="%%~nxF" target="_blank"^>
+    echo         ^<div class="file-type-badge" style="%BADGE_PDF%"^>PDF^</div^>
+    echo         ^<span class="file-name"^>%%~nxF^</span^>
+    echo         ^<span class="file-arrow"^>^&nearr;^</span^>
+    echo       ^</a^>
+    echo     ^</li^>
+    ) >> "%OUTFILE%"
+)
+
+for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.JPG" "%MYDIR%\*.jpeg" "%MYDIR%\*.JPEG") do (
+    set /a COUNT+=1
+    (
+    echo     ^<li class="file-item"^>
+    echo       ^<a href="%%~nxF" target="_blank"^>
+    echo         ^<div class="file-type-badge" style="%BADGE_JPG%"^>JPG^</div^>
+    echo         ^<span class="file-name"^>%%~nxF^</span^>
+    echo         ^<span class="file-arrow"^>^&nearr;^</span^>
+    echo       ^</a^>
+    echo     ^</li^>
+    ) >> "%OUTFILE%"
+)
+
 if %COUNT%==0 (
     echo     ^<li style="padding:2rem 1rem;text-align:center;color:#5a5a5a;"^>Noch keine Dateien vorhanden.^</li^> >> "%OUTFILE%"
-) else (
-    for /f "usebackq tokens=1,2,3 delims=|" %%A in ("%TMPFILE%") do (
-        (
-        echo     ^<li class="file-item"^>
-        echo       ^<a href="%%A" target="_blank"^>
-        echo         ^<div class="file-type-badge" style="%%C"^>%%B^</div^>
-        echo         ^<span class="file-name"^>%%A^</span^>
-        echo         ^<span class="file-arrow"^>^&nearr;^</span^>
-        echo       ^</a^>
-        echo     ^</li^>
-        ) >> "%OUTFILE%"
-    )
 )
 
 :: HTML abschliessen
@@ -158,10 +180,9 @@ echo ^</body^>
 echo ^</html^>
 ) >> "%OUTFILE%"
 
-if exist "%TMPFILE%" del "%TMPFILE%"
-
+echo Gefundene Dateien: %COUNT%
 echo.
-echo Fertig! index.html wurde mit %COUNT% Datei(en^) erstellt.
+echo Fertig! index.html wurde erstellt.
 echo.
 echo Nicht vergessen: In GitHub Desktop committen und pushen!
 echo.
