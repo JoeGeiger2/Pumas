@@ -118,7 +118,7 @@ echo ^<header^>
 echo   ^<div class="header-inner"^>
 echo     ^<a class="back-link" href="../index.html"^>^&larr; Zuruck zur Ubersicht^</a^>
 echo     ^<div class="header-top"^>
-echo       ^<div class="header-icon"^>%ICON%^</div^>
+echo       ^<img src="../Logo_Puma_Signatur.jpg" alt="Graue Pumas Logo" style="width:50px;height:50px;object-fit:contain;filter:brightness(0^) invert(1^) opacity(0.9^);flex-shrink:0;"^>
 echo       ^<div^>
 echo         ^<h1^>%TITLE%^</h1^>
 echo         ^<div class="header-sub"^>%SUB%^</div^>
