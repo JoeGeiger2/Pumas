@@ -1,23 +1,106 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pumas – Ergebnisse</title>
-<style>
-body { font-family: system-ui; background:#f7f7f7; padding:1.5rem; font-size:1.4rem; }
-h1 { font-size:2rem; }
-a { display:block; padding:1rem; margin:0.7rem 0; background:white; border-radius:12px; text-decoration:none; color:#111; font-size:1.4rem; }
-a:hover { background:#eefaf5; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ergebnisse – Senior Golfer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark: #1a3d2b; --green-mid: #2d6a4f; --green-light: #52b788;
+      --gold: #c9a84c; --gold-light: #e9c46a;
+      --cream: #faf7f2; --text: #1e1e1e; --text-light: #5a5a5a;
+      --shadow: 0 4px 24px rgba(26,61,43,0.13);
+    }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+    header { background: var(--green-dark); }
+    header::after { content: ''; display: block; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+    .header-inner { max-width: 800px; margin: 0 auto; padding: 1.5rem 1.5rem 1.4rem; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.83rem; font-weight: 600; color: var(--gold-light);
+      text-decoration: none; letter-spacing: 0.04em; opacity: 0.85; transition: opacity 0.15s; margin-bottom: 1rem;
+    }
+    .back-link:hover { opacity: 1; }
+    .header-top { display: flex; align-items: center; gap: 0.9rem; }
+    .header-icon {
+      width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 5vw, 1.9rem); font-weight: 700; color: #fff; line-height: 1.2; }
+    .header-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); font-weight: 300; margin-top: 0.2rem; }
+    main { max-width: 800px; margin: 1.8rem auto 3rem; padding: 0 1rem; }
+    .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-mid); margin-bottom: 0.8rem; padding-left: 0.2rem; }
+    .file-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .file-item a {
+      display: flex; align-items: center; gap: 1rem;
+      background: #fff; border: 1px solid #e8e2d8; border-radius: 10px;
+      padding: 1rem 1.2rem; text-decoration: none; color: var(--text);
+      box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .file-item a:hover { transform: translateX(4px); box-shadow: 0 6px 28px rgba(26,61,43,0.15); border-color: var(--green-light); }
+    .file-item a:active { transform: translateX(0); }
+    .file-type-badge {
+      flex-shrink: 0; width: 38px; height: 38px; border-radius: 8px;
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; color: #fff; letter-spacing: 0.05em;
+    }
+    .file-name { font-size: 0.97rem; font-weight: 600; color: var(--green-dark); flex: 1; }
+    .file-arrow { color: var(--green-mid); font-size: 1rem; opacity: 0.5; }
+    footer { text-align: center; padding: 1.5rem 1rem 2rem; font-size: 0.78rem; color: var(--text-light); border-top: 1px solid #e8e2d8; }
+  </style>
 </head>
 <body>
-<h1>Pumas – Ergebnisse</h1>
-<p>Tippe zum Öffnen.</p>
-<ul style="list-style:none;padding:0">
-<li><a href="Neumitglieder 2026.pdf" target="_blank">Neumitglieder 2026.pdf</a></li>
-<li><a href="index2.html" target="_blank">index2.html</a></li>
-</ul>
-<p style="margin-top:2rem"><a href="../index.html">Zurück zum Hauptmenü</a></p>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="../index.html">← Zurück zur Übersicht</a>
+    <div class="header-top">
+      <div class="header-icon">🏆</div>
+      <div>
+        <h1>Ergebnisse</h1>
+        <div class="header-sub">Turnierergebnisse als PDF</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="section-label">PDF-Dokumente</p>
+
+  <!--
+    ═══════════════════════════════════════════════════════
+    ANLEITUNG: Dateien eintragen
+    Beispiel:
+      <li class="file-item">
+        <a href="ergebnis-senioren-cup-2026.pdf" target="_blank">
+          <div class="file-type-badge">PDF</div>
+          <span class="file-name">Senioren Cup 2026</span>
+          <span class="file-arrow">↗</span>
+        </a>
+      </li>
+    ═══════════════════════════════════════════════════════
+  -->
+
+  <ul class="file-list">
+
+    <li class="file-item">
+      <a href="beispiel.pdf" target="_blank">
+        <div class="file-type-badge">PDF</div>
+        <span class="file-name">Beispiel-Ergebnis</span>
+        <span class="file-arrow">↗</span>
+      </a>
+    </li>
+
+  </ul>
+</main>
+
+<footer>
+  &copy; 2026 · Senior Golfer
+</footer>
+
 </body>
 </html>
