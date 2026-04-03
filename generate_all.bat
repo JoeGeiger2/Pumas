@@ -23,7 +23,7 @@ set "ERRORS=0"
 :: Saison 2026
 if exist "%MAINDIR%\saison2026\generate.bat" (
     echo  [1/5] Saison 2026 ...
-    call "%MAINDIR%\saison2026\generate.bat" >nul
+    call "%MAINDIR%\saison2026\generate.bat"
     echo  OK
 ) else (
     echo  [1/5] FEHLER: saison2026\generate.bat nicht gefunden!
@@ -33,7 +33,7 @@ if exist "%MAINDIR%\saison2026\generate.bat" (
 :: Startlisten
 if exist "%MAINDIR%\startlisten\generate.bat" (
     echo  [2/5] Startlisten ...
-    call "%MAINDIR%\startlisten\generate.bat" >nul
+    call "%MAINDIR%\startlisten\generate.bat"
     echo  OK
 ) else (
     echo  [2/5] FEHLER: startlisten\generate.bat nicht gefunden!
@@ -43,7 +43,7 @@ if exist "%MAINDIR%\startlisten\generate.bat" (
 :: Ergebnisse
 if exist "%MAINDIR%\ergebnisse\generate.bat" (
     echo  [3/5] Ergebnisse ...
-    call "%MAINDIR%\ergebnisse\generate.bat" >nul
+    call "%MAINDIR%\ergebnisse\generate.bat"
     echo  OK
 ) else (
     echo  [3/5] FEHLER: ergebnisse\generate.bat nicht gefunden!
@@ -53,7 +53,7 @@ if exist "%MAINDIR%\ergebnisse\generate.bat" (
 :: Fotos
 if exist "%MAINDIR%\fotos\generate.bat" (
     echo  [4/5] Fotos ...
-    call "%MAINDIR%\fotos\generate.bat" >nul
+    call "%MAINDIR%\fotos\generate.bat"
     echo  OK
 ) else (
     echo  [4/5] FEHLER: fotos\generate.bat nicht gefunden!
@@ -63,7 +63,7 @@ if exist "%MAINDIR%\fotos\generate.bat" (
 :: Sonstiges
 if exist "%MAINDIR%\sonstiges\generate.bat" (
     echo  [5/5] Sonstiges ...
-    call "%MAINDIR%\sonstiges\generate.bat" >nul
+    call "%MAINDIR%\sonstiges\generate.bat"
     echo  OK
 ) else (
     echo  [5/5] FEHLER: sonstiges\generate.bat nicht gefunden!
