@@ -52,7 +52,6 @@ if not defined TITLE (
     echo FEHLER: Ordner "%DIR%" ist unbekannt.
     echo Erlaubt: saison2026, startlisten, ergebnisse, fotos, sonstiges
     echo.
-    pause
     exit /b 1
 )
 
