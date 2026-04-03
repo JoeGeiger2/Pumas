@@ -25,7 +25,7 @@ set "SUB="
 if /i "%DIR%"=="saison2026" (
     set "ICON=&#128197;"
     set "TITLE=Saison 2026"
-    set "SUB=Dokumente &amp; Informationen zur Saison"
+    set "SUB=Dokumente und Informationen zur Saison"
 )
 if /i "%DIR%"=="startlisten" (
     set "ICON=&#128203;"
@@ -137,7 +137,7 @@ set "COUNT=0"
 set "BADGE_PDF=background:linear-gradient(135deg,#c0392b,#e74c3c)"
 set "BADGE_JPG=background:linear-gradient(135deg,#1a6b8a,#2196b0)"
 
-for %%F in ("%MYDIR%\*.pdf" "%MYDIR%\*.PDF") do (
+for %%F in ("%MYDIR%\*.pdf") do (
     set /a COUNT+=1
     (
     echo     ^<li class="file-item"^>
@@ -150,7 +150,7 @@ for %%F in ("%MYDIR%\*.pdf" "%MYDIR%\*.PDF") do (
     ) >> "%OUTFILE%"
 )
 
-for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.JPG" "%MYDIR%\*.jpeg" "%MYDIR%\*.JPEG") do (
+for %%F in ("%MYDIR%\*.jpg" "%MYDIR%\*.jpeg") do (
     set /a COUNT+=1
     (
     echo     ^<li class="file-item"^>
