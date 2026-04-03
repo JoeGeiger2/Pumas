@@ -1,0 +1,31 @@
+name: Index-Seiten generieren
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'saison2026/**'
+      - 'startlisten/**'
+      - 'ergebnisse/**'
+      - 'fotos/**'
+      - 'ausschreibungen/**'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Index-Seiten generieren
+        run: python3 .github/scripts/generate_index.py
+
+      - name: Änderungen committen und pushen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add saison2026/index.html startlisten/index.html ergebnisse/index.html fotos/index.html ausschreibungen/index.html
+          git diff --staged --quiet || git commit -m "Index-Seiten automatisch aktualisiert"
+          git push
