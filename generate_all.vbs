@@ -241,15 +241,15 @@ f.WriteLine "</html>"
 f.Close
 WScript.StdOut.WriteLine "  OK"
 
-WScript.StdOut.WriteLine "  [5/5] Sonstiges ..."
-outpath = maindir & "\sonstiges\index.html"
+WScript.StdOut.WriteLine "  [5/5] Ausschreibungen ..."
+outpath = maindir & "\ausschreibungen\index.html"
 Set f = fso.CreateTextFile(outpath, True, True)
 f.WriteLine "<!DOCTYPE html>"
 f.WriteLine "<html lang=""de"">"
 f.WriteLine "<head>"
 f.WriteLine "  <meta charset=""UTF-8"">"
 f.WriteLine "  <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">"
-f.WriteLine "  <title>Sonstiges - Graue Pumas</title>"
+f.WriteLine "  <title>Ausschreibungen - Graue Pumas</title>"
 f.WriteLine "  <link href=""https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap"" rel=""stylesheet"">"
 f.WriteLine "  <style>"
 f.WriteLine "    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}"
@@ -276,14 +276,14 @@ f.WriteLine "<body>"
 f.WriteLine "<header>"
 f.WriteLine "  <div class=""hi"">"
 f.WriteLine "    <a class=""back"" href=""../index.html"">&larr; Zur&uuml;ck zur &Uuml;bersicht</a>"
-f.WriteLine "    <h1>Sonstiges</h1>"
-f.WriteLine "    <div class=""sub"">Weitere Dokumente als PDF</div>"
+f.WriteLine "    <h1>Ausschreibungen</h1>"
+f.WriteLine "    <div class=""sub"">Ausschreibungen und weitere Dokumente</div>"
 f.WriteLine "  </div>"
 f.WriteLine "</header>"
 f.WriteLine "<main>"
 f.WriteLine "  <p class=""lbl"">Dateien</p>"
 f.WriteLine "  <ul>"
-Set folder = fso.GetFolder(maindir & "\sonstiges")
+Set folder = fso.GetFolder(maindir & "\ausschreibungen")
 For Each fil In folder.Files
   ext = LCase(fso.GetExtensionName(fil.Name))
   If ext = "pdf" Then
