@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auslosung Agadir ✈️</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f0;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 1.5rem 1rem 3rem;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e5e5e0;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 15px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    background: #e8f0fe; color: #1a56db; font-weight: 500;
+  }
+  .name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  input[type=text] {
+    width: 100%; padding: 9px 11px; font-size: 14px;
+    border: 1px solid #ddd; border-radius: 10px;
+    background: #fafafa; color: #1a1a1a; outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type=text]:focus { border-color: #1a56db; background: #fff; }
+  .cb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .cb-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; cursor: pointer; padding: 6px 10px;
+    border-radius: 10px; border: 1px solid #eee;
+    transition: background 0.1s;
+  }
+  .cb-label:hover { background: #f5f5f5; }
+  .cb-label input { width: 16px; height: 16px; accent-color: #1a56db; cursor: pointer; }
+  .btn {
+    width: 100%; padding: 12px; font-size: 15px; font-weight: 600;
+    border-radius: 12px; border: none; cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: #1a56db; color: #fff; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-primary:disabled { background: #aaa; cursor: not-allowed; transform: none; }
+  .btn-sec { background: #f0f0ea; color: #333; margin-top: 8px; }
+  .btn-sec:hover { background: #e5e5df; }
+  .btn-copy { background: #e8f5e9; color: #1b5e20; margin-top: 0; }
+  .nav-row { display: flex; gap: 8px; margin-top: 12px; }
+  .nav-row .btn { flex: 1; }
+  .step { display: none; }
+  .step.active { display: block; }
+  .dot-row { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; transition: background 0.2s; }
+  .dot.on { background: #1a56db; }
+
+  /* Slots */
+  .slots-row { display: flex; gap: 10px; justify-content: center; margin: 16px 0 8px; flex-wrap: wrap; }
+  .slot-box {
+    width: 100px; height: 56px;
+    border: 2px solid #ddd; border-radius: 12px;
+    background: #fafafa; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .slot-inner {
+    font-size: 14px; font-weight: 600; color: #333;
+    text-align: center; padding: 0 8px; line-height: 1.3;
+    transition: color 0.3s;
+  }
+  .slot-box.spinning { border-color: #1a56db; background: #f0f5ff; }
+  .slot-box.spinning .slot-inner { color: #1a56db; }
+  .slot-box.winner { border-color: #2e7d32; background: #e8f5e9; }
+  .slot-box.winner .slot-inner { color: #1b5e20; }
+
+  /* Results */
+  .res-block { margin-top: 14px; }
+  .res-label { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+  .winner-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f0f0ea; }
+  .winner-row:last-child { border-bottom: none; }
+  .trophy { font-size: 18px; }
+  .wname { font-size: 16px; font-weight: 600; }
+  .loser-line { font-size: 13px; color: #666; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0ea; }
+
+  /* Confetti */
+  .confetti-wrap { position: relative; overflow: hidden; }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+  }
+  .confetti-piece {
+    position: absolute; width: 8px; height: 8px; border-radius: 2px;
+    animation: fall 1.6s ease-in forwards;
+    pointer-events: none;
+  }
+
+  /* Watcher view */
+  .big-result { text-align: center; padding: 2rem 0 1rem; }
+  .big-icon { font-size: 48px; margin-bottom: 12px; }
+  .big-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .big-sub { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+
+  .share-box {
+    background: #f0f5ff; border: 1px solid #c7d9f9; border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 14px;
+    font-size: 13px; color: #333; word-break: break-all;
+  }
+  .share-label { font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+
+  /* Steps indicator */
+  .steps-bar { display: flex; gap: 0; margin-bottom: 1.5rem; }
+  .step-pill {
+    flex: 1; text-align: center; font-size: 12px; padding: 4px;
+    color: #aaa; border-bottom: 2px solid #eee; transition: color 0.2s, border-color 0.2s;
+  }
+  .step-pill.on { color: #1a56db; border-color: #1a56db; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ORGANISER VIEW (default) -->
+  <div id="orgView">
+    <h1>✈️ Auslosung Agadir</h1>
+    <p class="sub">Business Class Plätze fair auslosen</p>
+
+    <div class="steps-bar">
+      <div class="step-pill on" id="sp0">1. Namen</div>
+      <div class="step-pill" id="sp1">2. Auslosen</div>
+      <div class="step-pill" id="sp2">3. Teilen</div>
+    </div>
+
+    <!-- Step 0: Namen -->
+    <div class="step active" id="s0">
+      <div class="card">
+        <div class="card-title">Alle Teilnehmer <span class="badge">10 Personen</span></div>
+        <div class="name-grid" id="nameGrid"></div>
+      </div>
+      <button class="btn btn-primary" onclick="goStep(1)">Weiter →</button>
+    </div>
+
+    <!-- Step 1: Auslosen -->
+    <div class="step" id="s1">
+      <div class="card confetti-wrap" id="hinCard">
+        <div class="card-title">Hinflug <span class="badge">2 BC-Plätze aus 10</span></div>
+        <div class="cb-grid" id="hinCbs"></div>
+        <div class="slots-row" id="hinSlots"></div>
+        <button class="btn btn-primary" id="btnHin" onclick="runDraw('hin')">🎰 Jetzt auslosen</button>
+        <div class="res-block" id="hinRes" style="display:none;"></div>
+      </div>
+
+      <div class="card confetti-wrap" id="rueckCard">
+        <div class="card-title">Rückflug 1 <span class="badge">3 BC-Plätze aus 4</span></div>
+        <div class="cb-grid" id="rueckCbs"></div>
+        <div class="slots-row" id="rueckSlots"></div>
+        <button class="btn btn-primary" id="btnRueck" onclick="runDraw('rueck')">🎰 Jetzt auslosen</button>
+        <div class="res-block" id="rueckRes" style="display:none;"></div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-sec" onclick="goStep(0)">← Zurück</button>
+        <button class="btn btn-primary" id="btnNext2" style="display:none" onclick="goStep(2)">Teilen →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Teilen -->
+    <div class="step" id="s2">
+      <div class="card">
+        <div class="card-title">🔗 Link zum Teilen</div>
+        <p style="font-size:13px;color:#555;margin-bottom:12px;">Schick diesen Link per WhatsApp – alle sehen dieselbe Auslosung live mit Slot-Animation!</p>
+        <div class="share-label">Dein Link:</div>
+        <div class="share-box" id="shareUrl">–</div>
+        <button class="btn btn-copy" onclick="copyLink()">📋 Link kopieren</button>
+        <div style="font-size:13px;color:#2e7d32;text-align:center;margin-top:8px;display:none;" id="copyDone">Kopiert!</div>
+      </div>
+      <div class="card" id="summaryCard2"></div>
+      <div class="nav-row">
+        <button class="btn btn-sec" onclick="goStep(1)">← Zurück</button>
+        <button class="btn btn-primary" onclick="copyWhatsApp()">📱 WhatsApp-Nachricht</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATCHER VIEW -->
+  <div id="watchView" style="display:none;">
+    <div class="card confetti-wrap" id="watchCard">
+      <div class="big-result">
+        <div class="big-icon">✈️</div>
+        <div class="big-title" id="watchTitle">Auslosung Agadir</div>
+        <div class="big-sub" id="watchSub">Business Class Plätze</div>
+      </div>
+
+      <div id="watchHinSection">
+        <div class="card-title" style="justify-content:center;">Hinflug <span class="badge">2 BC aus 10</span></div>
+        <div class="slots-row" id="watchHinSlots"></div>
+        <div class="res-block" id="watchHinRes" style="display:none;"></div>
+      </div>
+
+      <div style="border-top:1px solid #eee;margin:16px 0;"></div>
+
+      <div id="watchRueckSection">
+        <div class="card-title" style="justify-content:center;">Rückflug 1 <span class="badge">3 BC aus 4</span></div>
+        <div class="slots-row" id="watchRueckSlots"></div>
+        <div class="res-block" id="watchRueckRes" style="display:none;"></div>
+      </div>
+
+      <div id="watchStatus" style="text-align:center;font-size:14px;color:#888;margin-top:16px;">Animation startet gleich…</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+let names = Array(10).fill('');
+names[0] = 'Joe';
+let hinW=[], hinL=[], rueckW=[], rueckL=[], hinDone=false, rueckDone=false;
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function getN(){ return names.map((n,i) => n || ('Person '+(i+1))); }
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function buildNameGrid(){
+  const g=document.getElementById('nameGrid'); g.innerHTML='';
+  for(let i=0;i<10;i++){
+    const inp=document.createElement('input');
+    inp.type='text'; inp.placeholder='Person '+(i+1); inp.value=names[i];
+    inp.dataset.i=i;
+    inp.oninput=e=>{ names[e.target.dataset.i]=e.target.value.trim(); };
+    g.appendChild(inp);
+  }
+}
+
+function buildCbs(id, allChecked){
+  const c=document.getElementById(id); c.innerHTML='';
+  getN().forEach(name=>{
+    const lbl=document.createElement('label'); lbl.className='cb-label';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.value=name; cb.checked=allChecked;
+    lbl.appendChild(cb); lbl.appendChild(document.createTextNode(name));
+    c.appendChild(lbl);
+  });
+}
+
+function buildSlots(id, count){
+  const c=document.getElementById(id); c.innerHTML='';
+  for(let i=0;i<count;i++){
+    const box=document.createElement('div'); box.className='slot-box';
+    const inner=document.createElement('div'); inner.className='slot-inner'; inner.textContent='?';
+    box.appendChild(inner); c.appendChild(box);
+  }
+}
+
+// ─── Slot animation ──────────────────────────────────────────────────────────
+function animateSlots(containerId, pool, winners, onDone){
+  const boxes=[...document.getElementById(containerId).querySelectorAll('.slot-box')];
+  const inners=boxes.map(b=>b.querySelector('.slot-inner'));
+  boxes.forEach(b=>b.classList.add('spinning'));
+  let frame=0;
+  const stopAt=winners.map((_,i)=>35+i*8);
+  const totalFrames=stopAt[stopAt.length-1]+5;
+  const iv=setInterval(()=>{
+    frame++;
+    inners.forEach((inn,i)=>{
+      if(frame<stopAt[i]){
+        inn.textContent=pool[Math.floor(Math.random()*pool.length)];
+      } else if(!boxes[i].classList.contains('winner')){
+        inn.textContent=winners[i];
+        boxes[i].classList.remove('spinning');
+        boxes[i].classList.add('winner');
+      }
+    });
+    if(frame>=totalFrames){ clearInterval(iv); confetti(boxes[0].closest('.confetti-wrap')); onDone(); }
+  }, 70);
+}
+
+// ─── Confetti ────────────────────────────────────────────────────────────────
+function confetti(parent){
+  const colors=['#1a56db','#2e7d32','#f59e0b','#e11d48','#7c3aed','#0891b2'];
+  for(let i=0;i<30;i++){
+    const el=document.createElement('div'); el.className='confetti-piece';
+    el.style.left=Math.random()*100+'%';
+    el.style.top='0';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDelay=(Math.random()*0.5)+'s';
+    el.style.animationDuration=(1.2+Math.random()*0.8)+'s';
+    parent.appendChild(el);
+    setTimeout(()=>el.remove(), 2500);
+  }
+}
+
+// ─── Draw ────────────────────────────────────────────────────────────────────
+function runDraw(which){
+  const isHin=which==='hin';
+  const cbId=isHin?'hinCbs':'rueckCbs';
+  const slotId=isHin?'hinSlots':'rueckSlots';
+  const resId=isHin?'hinRes':'rueckRes';
+  const btnId=isHin?'btnHin':'btnRueck';
+  const winCount=isHin?2:3;
+  const checked=[...document.querySelectorAll('#'+cbId+' input:checked')].map(cb=>cb.value);
+  if(checked.length<winCount){ alert('Zu wenige Teilnehmer ausgewählt!'); return; }
+  document.getElementById(btnId).disabled=true;
+  const shuffled=shuffle(checked);
+  const winners=shuffled.slice(0,winCount);
+  const losers=shuffled.slice(winCount);
+  animateSlots(slotId, checked, winners, ()=>{
+    if(isHin){hinW=winners;hinL=losers;hinDone=true;}
+    else{rueckW=winners;rueckL=losers;rueckDone=true;}
+    renderRes(resId, winners, losers);
+    document.getElementById(resId).style.display='block';
+    if(hinDone&&rueckDone){ document.getElementById('btnNext2').style.display='block'; }
+  });
+}
+
+function renderRes(id, winners, losers){
+  const box=document.getElementById(id);
+  let html='<div class="res-label">Gewinner</div>';
+  winners.forEach(w=>html+=`<div class="winner-row"><span class="trophy">🏆</span><span class="wname">${w}</span></div>`);
+  if(losers.length) html+=`<div class="loser-line">Economy: ${losers.join(', ')}</div>`;
+  box.innerHTML=html;
+}
+
+// ─── Steps ───────────────────────────────────────────────────────────────────
+function goStep(n){
+  if(n===1){
+    buildCbs('hinCbs',true);
+    buildCbs('rueckCbs',false);
+    buildSlots('hinSlots',2);
+    buildSlots('rueckSlots',3);
+    hinDone=false; rueckDone=false;
+    document.getElementById('hinRes').style.display='none';
+    document.getElementById('rueckRes').style.display='none';
+    document.getElementById('btnHin').disabled=false;
+    document.getElementById('btnRueck').disabled=false;
+    document.getElementById('btnNext2').style.display='none';
+  }
+  if(n===2){ buildShareStep(); }
+  document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active',i===n));
+  [0,1,2].forEach(i=>document.getElementById('sp'+i).classList.toggle('on',i===n));
+}
+
+// ─── Share ────────────────────────────────────────────────────────────────────
+function buildShareStep(){
+  const data={
+    hin: { winners: hinW, losers: hinL },
+    rueck: { winners: rueckW, losers: rueckL }
+  };
+  const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  const url=window.location.origin+window.location.pathname+'?r='+encoded;
+  document.getElementById('shareUrl').textContent=url;
+
+  // Summary
+  const card=document.getElementById('summaryCard2');
+  let html='<div class="card-title">Ergebnis</div>';
+  html+='<div class="res-label">Hinflug BC</div>';
+  hinW.forEach(w=>html+=`<div class="winner-row"><span class="trophy">🏆</span><span class="wname">${w}</span></div>`);
+  html+=`<div class="loser-line">Economy: ${hinL.join(', ')}</div>`;
+  html+='<div class="res-label" style="margin-top:12px;">Rückflug 1 BC</div>';
+  rueckW.forEach(w=>html+=`<div class="winner-row"><span class="trophy">🏆</span><span class="wname">${w}</span></div>`);
+  html+=`<div class="loser-line">Economy: ${rueckL.join(', ')}</div>`;
+  card.innerHTML=html;
+}
+
+function copyLink(){
+  const url=document.getElementById('shareUrl').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    const el=document.getElementById('copyDone');
+    el.style.display='block'; setTimeout(()=>el.style.display='none',2000);
+  });
+}
+
+function copyWhatsApp(){
+  const url=document.getElementById('shareUrl').textContent;
+  let msg='✈️ *Auslosung Agadir – Business Class*\n\n';
+  msg+='*Hinflug:*\n';
+  hinW.forEach(w=>msg+='🏆 '+w+'\n');
+  msg+='Economy: '+hinL.join(', ')+'\n\n';
+  msg+='*Rückflug 1:*\n';
+  rueckW.forEach(w=>msg+='🏆 '+w+'\n');
+  msg+='Economy: '+rueckL.join(', ')+'\n\n';
+  msg+='▶️ Auslosung mit Animation ansehen:\n'+url;
+  navigator.clipboard.writeText(msg).then(()=>{
+    alert('WhatsApp-Nachricht kopiert! Jetzt in WhatsApp einfügen.');
+  });
+}
+
+// ─── Watcher mode ─────────────────────────────────────────────────────────────
+function initWatchMode(data){
+  document.getElementById('orgView').style.display='none';
+  document.getElementById('watchView').style.display='block';
+
+  const hinAll=[...data.hin.winners,...data.hin.losers];
+  const rueckAll=[...data.rueck.winners,...data.rueck.losers];
+
+  buildSlots('watchHinSlots', data.hin.winners.length);
+  buildSlots('watchRueckSlots', data.rueck.winners.length);
+
+  document.getElementById('watchStatus').textContent='Animation läuft…';
+
+  animateSlots('watchHinSlots', hinAll, data.hin.winners, ()=>{
+    renderRes('watchHinRes', data.hin.winners, data.hin.losers);
+    document.getElementById('watchHinRes').style.display='block';
+
+    setTimeout(()=>{
+      animateSlots('watchRueckSlots', rueckAll, data.rueck.winners, ()=>{
+        renderRes('watchRueckRes', data.rueck.winners, data.rueck.losers);
+        document.getElementById('watchRueckRes').style.display='block';
+        document.getElementById('watchStatus').textContent='🎉 Das ist das Ergebnis!';
+        confetti(document.getElementById('watchCard'));
+      });
+    }, 800);
+  });
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const r=params.get('r');
+  if(r){
+    try {
+      const data=JSON.parse(decodeURIComponent(escape(atob(r))));
+      initWatchMode(data);
+    } catch(e){
+      alert('Ungültiger Link.');
+    }
+  } else {
+    buildNameGrid();
+  }
+})();
+</script>
+</body>
+</html>
